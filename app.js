@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var expressValidator = require('express-validator');
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://root:abcD1234@cluster0-wuil3.mongodb.net/test?retryWrites=true', { useNewUrlParser: true });
@@ -22,6 +23,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(expressValidator());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

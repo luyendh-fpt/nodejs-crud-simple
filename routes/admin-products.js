@@ -5,7 +5,7 @@ var productController = require('../controllers/productController')
 /* GET users listing. */
 router.get('/create', productController.create);
 
-router.post('/create', productController.save);
+router.post('/create', productController.validate('save'), productController.save);
 
 router.get('/list', productController.getList);
 

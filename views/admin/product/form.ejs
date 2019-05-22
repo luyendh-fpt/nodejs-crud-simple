@@ -14,6 +14,15 @@
 </head>
 <body>
 <h1>Product Form</h1>
+<%
+    if(typeof errors !== 'undefined' && errors.length > 0){
+        for (var i = 0; i < errors.length; i++) {
+%>
+    <div class="error"><%= errors[i].param%> - <%= errors[i].msg%></div>
+<%
+        }
+    }
+ %>
 <a href="/admin/products/list">List Product</a>
 <form action="<%= action %>" method="post" id="product-form">
     <div>
@@ -43,10 +52,7 @@
                         minlength: 5,
                         maxlength: 20
                     },
-                    price: 'required',
-                    imageUrl: {
-                        equalTo: '#name'
-                    }
+                    price: 'required'
                 },
                 messages: {
                     name: {
@@ -55,10 +61,7 @@
                         maxlength: 'Please enter name from 5 to 20 character',
                         email: 'Invalid email'
                     },
-                    price: 'Please enter price!',
-                    imageUrl: {
-                        equalTo: 'Not equal name.'
-                    }
+                    price: 'Please enter price!'
                 }
             }
         );
