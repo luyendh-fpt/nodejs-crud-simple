@@ -6,24 +6,63 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 <h1>Product Form</h1>
 <a href="/admin/products/list">List Product</a>
-<form action="<%= action%>" method="post">
+<form action="<%= action %>" method="post" id="product-form">
     <div>
-        Name <input type="text" name="name" value="<%= obj.name%>">
+        Name <input type="text" id="name" name="name" value="<%= obj.name %>">
     </div>
     <div>
-        Price <input type="number" name="price" value="<%= obj.price%>">
+        Price <input type="number" name="price" value="<%= obj.price %>">
     </div>
     <div>
-        Image <input type="text" name="imageUrl" value="<%= obj.imageUrl%>">
+        Image <input type="text" name="imageUrl" value="<%= obj.imageUrl %>">
     </div>
     <div>
         <input type="submit" value="Submit">
         <input type="reset" value="Reset">
     </div>
 </form>
+<script src="/javascripts/jquery-1.11.1.js"></script>
+<script src="/javascripts/jquery.validate.min.js"></script>
+<script src="/javascripts/additional-methods.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#product-form').validate(
+            {
+                rules: {
+                    name: {
+                        required: true,
+                        minlength: 5,
+                        maxlength: 20
+                    },
+                    price: 'required',
+                    imageUrl: {
+                        equalTo: '#name'
+                    }
+                },
+                messages: {
+                    name: {
+                        required: 'Please enter product name!',
+                        minlength: 'Please enter name from 5 to 20 character',
+                        maxlength: 'Please enter name from 5 to 20 character',
+                        email: 'Invalid email'
+                    },
+                    price: 'Please enter price!',
+                    imageUrl: {
+                        equalTo: 'Not equal name.'
+                    }
+                }
+            }
+        );
+    });
+</script>
 </body>
 </html>
