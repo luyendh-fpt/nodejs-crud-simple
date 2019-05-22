@@ -11,7 +11,8 @@ var ProductSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    imageUrl: String
+    imageUrl: String,
+    status: Number
 });
 var Product = mongoose.model('products', ProductSchema);
 module.exports = Product;
