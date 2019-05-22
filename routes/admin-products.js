@@ -9,4 +9,12 @@ router.post('/create', productController.save);
 
 router.get('/list', productController.getList);
 
+router.get('/detail/:id', productController.getDetail);
+
+router.get('/edit/:id', productController.edit);
+
+router.post('/edit/:id', productController.update);
+
+router.post('/delete/:id', productController.delete);
+
 module.exports = router;

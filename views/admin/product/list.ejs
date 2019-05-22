@@ -12,7 +12,14 @@
 <a href="/admin/products/create">Create new</a>
 <ul>
     <%for (var i = 0; i < listData.length; i++){%>
-    <li><%=listData[i].id%> - <%=listData[i].name%></li>
+    <li>
+        <span><%=listData[i].id%> - <%=listData[i].name%></span>
+        <span>
+            <a href="/admin/products/detail/<%= listData[i]._id%>">Detail</a>&nbsp;
+            <a href="/admin/products/edit/<%= listData[i]._id%>">Edit</a>&nbsp;
+            <a href="/admin/products/delete?id=<%= listData[i]._id%>">Delete</a>&nbsp;
+        </span>
+    </li>
     <%}%>
 </ul>
 <div>
