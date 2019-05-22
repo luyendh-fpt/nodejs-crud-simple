@@ -5,7 +5,7 @@ exports.getList = function (req, resp) {
     var page = req.query.page;
     var limit = req.query.limit;
     var responseData;
-    Product.find().paginate(parseInt(page), parseInt(limit),
+    Product.find().where('status').ne(-1).paginate(parseInt(page), parseInt(limit),
         function (err, listData, totalItem) {
             responseData = {
                 'listData': listData,

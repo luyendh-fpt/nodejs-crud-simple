@@ -8,16 +8,16 @@
     <title>Document</title>
 </head>
 <body>
-<h1>List Product</h1>
+<h1 id="product-heading">List Product</h1>
 <a href="/admin/products/create">Create new</a>
 <ul>
     <%for (var i = 0; i < listData.length; i++){%>
-    <li>
+    <li class="data-item">
         <span><%=listData[i].id%> - <%=listData[i].name%></span>
         <span>
             <a href="/admin/products/detail/<%= listData[i]._id%>">Detail</a>&nbsp;
             <a href="/admin/products/edit/<%= listData[i]._id%>">Edit</a>&nbsp;
-            <a href="/admin/products/delete?id=<%= listData[i]._id%>">Delete</a>&nbsp;
+            <a title="<%= listData[i]._id%>" class="btn-delete" href="#">Delete</a>&nbsp;
         </span>
     </li>
     <%}%>
@@ -45,5 +45,26 @@
     }
     %>
 </div>
+<script>
+    var deleteBaseUrl = '/admin/products/delete/';
+    var listBtnDelete = document.getElementsByClassName('btn-delete');
+    for (var i = 0; i < listBtnDelete.length; i++) {
+        listBtnDelete[i].onclick = function () {
+            var requestUrl = deleteBaseUrl + this.title;
+            if(confirm('Are you sure wanna delete this product?')){
+                var xmlHttpRequest = new XMLHttpRequest();
+                xmlHttpRequest.onreadystatechange = function(){
+                    if(this.status == 200 && this.readyState == 4){
+                        alert('Delete success');
+                        location.reload();
+                    }
+                };
+                xmlHttpRequest.open('POST', requestUrl, true);
+                xmlHttpRequest.send();
+            }
+            return false
+        }
+    }
+</script>
 </body>
 </html>
