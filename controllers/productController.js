@@ -1,5 +1,17 @@
 var Product = require('../models/product');
 require('mongoose-pagination');
+const { check, validationResult } = require('express-validator/check');
+
+exports.validate = function(method){
+    switch (method){
+        case 'save':{
+            return [
+                check('name', 'Name is required!').exists(),
+                check('price', 'Invalid email').exists().isEmail(),
+            ]
+        }
+    }
+}
 
 exports.getList = function (req, resp) {
     var page = req.query.page;
@@ -28,14 +40,26 @@ exports.create = function (req, resp) {
 
 // lưu trữ thông tin.
 exports.save = function (req, resp) {
-    var obj = new Product(req.body);
-    obj.save(function (err) {
-        if (err) {
-            return resp.status(500).send(err);
-        } else {
-            return resp.redirect('/admin/products/list');
+    var errors = validationResult(req);
+    if(errors.isEmpty()){
+        var obj = new Product(req.body);
+        obj.save(function (err) {
+            if (err) {
+                return resp.status(500).send(err);
+            } else {
+                return resp.redirect('/admin/products/list');
+            }
+        });
+    }else{
+        console.log('@@@');
+        var responseData = {
+            'action': '/admin/products/create',
+            'obj': new Product(req.body),
+            'errors': errors.array()
         }
-    });
+        resp.render('admin/product/form', responseData);
+    }
+
 }
 
 // lấy chi tiết.
