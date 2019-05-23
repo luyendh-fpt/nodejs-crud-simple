@@ -1,7 +1,6 @@
 var Product = require('../models/product');
 require('mongoose-pagination');
 const { check, validationResult } = require('express-validator/check');
-var cloudinary = require('cloudinary').v2;
 
 exports.validate = function(method){
     switch (method){
