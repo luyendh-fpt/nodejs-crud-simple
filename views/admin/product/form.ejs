@@ -24,8 +24,7 @@ for (var i = 0; i < errors.length; i++) {
 }
 %>
 <a href="/admin/products/list">List Product</a>
-<form action="<%= action %>" method="post" id="product-form"
-      enctype="multipart/form-data">
+<form action="<%= action %>" method="post" id="product-form">
     <div>
         Name <input type="text" id="name" name="name" value="<%= obj.name %>">
     </div>
@@ -45,7 +44,12 @@ for (var i = 0; i < errors.length; i++) {
 <script src="/javascripts/jquery-1.11.1.js"></script>
 <script src="/javascripts/jquery.validate.min.js"></script>
 <script src="/javascripts/additional-methods.min.js"></script>
+
 <script>
+    const cloudName = 'xuanhung2401';
+    const unsignedUploadPreset = 'phlw547y';
+
+
     $(document).ready(function () {
         $('#product-form').validate(
             {
@@ -71,8 +75,7 @@ for (var i = 0; i < errors.length; i++) {
 
     });
 
-    const cloudName = 'xuanhung2401';
-    const unsignedUploadPreset = 'phlw547y';
+
 
     var img = document.querySelector('[name="image"]');
 
@@ -84,9 +87,10 @@ for (var i = 0; i < errors.length; i++) {
         xhr.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 var responseDataJson = JSON.parse(this.responseText);
+                console.log(responseDataJson);
                 var imageUrl = document.querySelector('input[name="imageUrl"]');
-                imageUrl.value = responseDataJson.url;
-                document.getElementById('image-preview').src = imageUrl.value;
+                imageUrl.value = responseDataJson.public_id;
+                document.getElementById('image-preview').src = responseDataJson.url;
             }
         }
         xhr.open('POST', url, true);
