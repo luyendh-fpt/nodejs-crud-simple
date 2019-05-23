@@ -47,6 +47,20 @@ var imageH = 150;
             <li><a href="/admin/products/list?min=2000&max=5000">2000 - 5000 VND</a></li>
             <li><a href="/admin/products/list?min=5000&max=0">>= 5000 VND</a></li>
         </ul>
+        <div>Search by category</div>
+        <ul>
+            <li>
+                <a href="/admin/products/list">All</a>
+            </li>
+            <%
+            for (var i = 0; i < categories.length; i++) {
+            %>
+                <li><a href="/admin/products/list?categoryId=<%=categories[i]._id%>"><%=categories[i].name%></a></li>
+            <%
+            }
+            %>
+
+        </ul>
     </div>
     <div class="main-content">
         <ul>
@@ -61,6 +75,15 @@ var imageH = 150;
             <!--<a title="<%= listData[i]._id %>" class="btn-delete" href="#">Delete</a>&nbsp;-->
                     <%= listData[i].price%> $
         </span>
+                <span>
+                    <%
+                        if(listData[i].category){
+                    %>
+                        - Danh mục: <%= listData[i].category.name%>
+                    <%
+                        }
+                    %>
+                </span>
             </li>
             <% } %>
         </ul>

@@ -19,6 +19,10 @@ var ProductSchema = new mongoose.Schema({
         required: true
     },
     imageUrl: String,
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'categories'
+    },
     createdAt: {type: Date},
     updatedAt: {type: Date},
     status: Number

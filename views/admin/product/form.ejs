@@ -14,6 +14,7 @@
 </head>
 <body>
 <h1>Product Form</h1>
+
 <%
 if(typeof errors !== 'undefined' && errors.length > 0){
 for (var i = 0; i < errors.length; i++) {
@@ -41,6 +42,18 @@ for (var i = 0; i < errors.length; i++) {
         Image <input type="file" name="image">
         <input type="hidden" name="imageUrl">
         <img src="" alt="" id="image-preview" style="width: 100px">
+    </div>
+    <div>
+        Category
+        <select name="categoryId">
+        <%
+            for(var i = 0; i < categories.length; i++){
+        %>
+            <option value="<%= categories[i]._id%>"><%= categories[i].name%></option>
+        <%
+            }
+        %>
+        </select>
     </div>
     <div>
         <input type="submit" value="Submit">

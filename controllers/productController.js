@@ -1,4 +1,6 @@
 var Product = require('../models/product');
+var Category = require('../models/category');
+var mongoose = require('mongoose');
 require('mongoose-pagination');
 const {check, validationResult} = require('express-validator/check');
 
@@ -18,6 +20,7 @@ exports.getList = function (req, resp) {
     var limit = req.query.limit || 10;
     var min = req.query.min;
     var max = req.query.max;
+    var categoryId = req.query.categoryId;
 
     var keyword = req.query.keyword;
     var query;
@@ -39,27 +42,37 @@ exports.getList = function (req, resp) {
     if(max && parseInt(max) > 0){
         query = query.where('price').lte(parseInt(max));
     }
+    if(categoryId){
+        query = query.where('category').eq(new mongoose.mongo.ObjectId(categoryId));
+    }
     query.sort('-createdAt')
+        .populate('category')
         .paginate(parseInt(page), parseInt(limit),
             function (err, listData, totalItem) {
-                responseData = {
-                    'listData': listData,
-                    'totalPage': Math.ceil(totalItem / limit),
-                    'page': page,
-                    'limit': limit,
-                    'keyword': keyword
-                };
-                resp.render('admin/product/list', responseData);
+                Category.find(function (err, categories) {
+                    responseData = {
+                        'listData': listData,
+                        'totalPage': Math.ceil(totalItem / limit),
+                        'page': page,
+                        'limit': limit,
+                        'keyword': keyword,
+                        'categories': categories
+                    };
+                    resp.render('admin/product/list', responseData);
+                });
             });
 }
 
 // trả về form.
 exports.create = function (req, resp) {
-    var responseData = {
-        'action': '/admin/products/create',
-        'obj': new Product()
-    }
-    resp.render('admin/product/form', responseData);
+    Category.find(function (err, list) {
+        var responseData = {
+            'action': '/admin/products/create',
+            'obj': new Product(),
+            'categories': list
+        }
+        resp.render('admin/product/form', responseData);
+    });
 }
 
 // lưu trữ thông tin.
@@ -122,6 +135,7 @@ exports.save = function (req, resp) {
     //     });
     // }
     var obj = new Product(req.body);
+    obj.category = new mongoose.mongo.ObjectId(req.body.categoryId);
     obj.save(function (err) {
         if (err) {
             return resp.status(500).send(err);

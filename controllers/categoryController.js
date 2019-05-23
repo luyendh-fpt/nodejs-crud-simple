@@ -1,4 +1,5 @@
 var Category = require('../models/category');
+var Product = require('../models/product');
 require('mongoose-pagination');
 
 exports.getList = function (req, resp) {

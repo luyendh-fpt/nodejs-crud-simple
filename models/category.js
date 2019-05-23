@@ -5,7 +5,11 @@ var Schema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
-    }
+    },
+    products:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'products'
+    }]
 });
 var ObjectModel = mongoose.model('categories', Schema);
 module.exports = ObjectModel;
