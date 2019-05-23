@@ -71,34 +71,41 @@ exports.save = function (req, resp) {
     //     resp.render('admin/product/form', responseData);
     // }
 
+    // var obj = new Product(req.body);
+    // if (req.files && req.files.image) {
+    //     var fileGettingUploaded = req.files.image.data;
+    //     cloudinary.uploader
+    //         .upload_stream(function (error, result) {
+    //             var imageUrl = result.url;
+    //             obj.imageUrl = imageUrl;
+    //             obj.save(function (err) {
+    //                 if (err) {
+    //                     return resp.status(500).send(err);
+    //                 } else {
+    //                     return resp.redirect('/admin/products/list');
+    //                 }
+    //             });
+    //             // res.send("Lưu sản phẩm thành công.");
+    //             console.log(cloudinary.image(result.public_id, {format: "jpg", crop: "fill", width: 120, height: 80}));
+    //         }).end(fileGettingUploaded);
+    // }else{
+    //     obj.imageUrl = 'https://www.touchtaiwan.com/images/default.jpg';
+    //     obj.save(function (err) {
+    //         if (err) {
+    //             return resp.status(500).send(err);
+    //         } else {
+    //             return resp.redirect('/admin/products/list');
+    //         }
+    //     });
+    // }
     var obj = new Product(req.body);
-    if (req.files && req.files.image) {
-        var fileGettingUploaded = req.files.image.data;
-        cloudinary.uploader
-            .upload_stream(function (error, result) {
-                var imageUrl = result.url;
-                obj.imageUrl = imageUrl;
-                obj.save(function (err) {
-                    if (err) {
-                        return resp.status(500).send(err);
-                    } else {
-                        return resp.redirect('/admin/products/list');
-                    }
-                });
-                // res.send("Lưu sản phẩm thành công.");
-                console.log(cloudinary.image(result.public_id, {format: "jpg", crop: "fill", width: 120, height: 80}));
-            }).end(fileGettingUploaded);
-    }else{
-        obj.imageUrl = 'https://www.touchtaiwan.com/images/default.jpg';
-        obj.save(function (err) {
-            if (err) {
-                return resp.status(500).send(err);
-            } else {
-                return resp.redirect('/admin/products/list');
-            }
-        });
-    }
-
+    obj.save(function (err) {
+        if (err) {
+            return resp.status(500).send(err);
+        } else {
+            return resp.redirect('/admin/products/list');
+        }
+    });
 
 }
 

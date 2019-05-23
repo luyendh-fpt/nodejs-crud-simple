@@ -15,14 +15,14 @@
 <body>
 <h1>Product Form</h1>
 <%
-    if(typeof errors !== 'undefined' && errors.length > 0){
-        for (var i = 0; i < errors.length; i++) {
+if(typeof errors !== 'undefined' && errors.length > 0){
+for (var i = 0; i < errors.length; i++) {
 %>
-    <div class="error"><%= errors[i].param%> - <%= errors[i].msg%></div>
+<div class="error"><%= errors[i].param %> - <%= errors[i].msg %></div>
 <%
-        }
-    }
- %>
+}
+}
+%>
 <a href="/admin/products/list">List Product</a>
 <form action="<%= action %>" method="post" id="product-form"
       enctype="multipart/form-data">
@@ -34,6 +34,8 @@
     </div>
     <div>
         Image <input type="file" name="image">
+        <input type="hidden" name="imageUrl">
+        <img src="" alt="" id="image-preview" style="width: 100px">
     </div>
     <div>
         <input type="submit" value="Submit">
@@ -66,7 +68,34 @@
                 }
             }
         );
+
     });
+
+    const cloudName = 'xuanhung2401';
+    const unsignedUploadPreset = 'phlw547y';
+
+    var img = document.querySelector('[name="image"]');
+
+    img.onchange = function () {
+        var file = this.files[0];
+        var url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var responseDataJson = JSON.parse(this.responseText);
+                var imageUrl = document.querySelector('input[name="imageUrl"]');
+                imageUrl.value = responseDataJson.url;
+                document.getElementById('image-preview').src = imageUrl.value;
+            }
+        }
+        xhr.open('POST', url, true);
+        var fd = new FormData();
+        fd.append('upload_preset', unsignedUploadPreset);
+        fd.append('tags', 'browser_upload');
+        fd.append('file', file);
+        xhr.send(fd);
+    }
 </script>
 </body>
 </html>
