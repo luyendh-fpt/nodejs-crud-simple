@@ -24,7 +24,8 @@
     }
  %>
 <a href="/admin/products/list">List Product</a>
-<form action="<%= action %>" method="post" id="product-form">
+<form action="<%= action %>" method="post" id="product-form"
+      enctype="multipart/form-data">
     <div>
         Name <input type="text" id="name" name="name" value="<%= obj.name %>">
     </div>
@@ -32,7 +33,7 @@
         Price <input type="number" name="price" value="<%= obj.price %>">
     </div>
     <div>
-        Image <input type="text" name="imageUrl" value="<%= obj.imageUrl %>">
+        Image <input type="file" name="image">
     </div>
     <div>
         <input type="submit" value="Submit">

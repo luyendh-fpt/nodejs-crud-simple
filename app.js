@@ -4,6 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressValidator = require('express-validator');
+const fileUpload = require('express-fileupload');
+var cloudinary = require('cloudinary');
+
+cloudinary.config({
+    cloud_name: 'xuanhung2401',
+    api_key: '882796476526336',
+    api_secret: 'gOOT_72AMyn9TQz1Hd4MxyGRjxY'
+});
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://root:abcD1234@cluster0-wuil3.mongodb.net/test?retryWrites=true', { useNewUrlParser: true });
@@ -24,6 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(expressValidator());
+app.use(fileUpload());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
