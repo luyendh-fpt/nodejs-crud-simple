@@ -1,10 +1,10 @@
 var Product = require('../models/product');
 require('mongoose-pagination');
-const { check, validationResult } = require('express-validator/check');
+const {check, validationResult} = require('express-validator/check');
 
-exports.validate = function(method){
-    switch (method){
-        case 'save':{
+exports.validate = function (method) {
+    switch (method) {
+        case 'save': {
             return [
                 check('name', 'Name is required!').exists(),
                 check('price', 'Invalid email').exists().isEmail(),
@@ -14,19 +14,43 @@ exports.validate = function(method){
 }
 
 exports.getList = function (req, resp) {
-    var page = req.query.page;
-    var limit = req.query.limit;
+    var page = req.query.page || 1;
+    var limit = req.query.limit || 10;
+    var min = req.query.min;
+    var max = req.query.max;
+
+    var keyword = req.query.keyword;
+    var query;
+    if (keyword) {
+        var searchPara = {
+            $text: {
+                $search: keyword
+            }
+        };
+        query = Product.find(searchPara);
+    } else {
+        query = Product.find();
+    }
     var responseData;
-    Product.find().where('status').ne(-1).paginate(parseInt(page), parseInt(limit),
-        function (err, listData, totalItem) {
-            responseData = {
-                'listData': listData,
-                'totalPage': Math.ceil(totalItem / limit),
-                'page': page,
-                'limit': limit
-            };
-            resp.render('admin/product/list', responseData);
-        });
+    query = query.where('status').ne(-1);
+    if(min){
+        query = query.where('price').gte(parseInt(min));
+    }
+    if(max && parseInt(max) > 0){
+        query = query.where('price').lte(parseInt(max));
+    }
+    query.sort('-createdAt')
+        .paginate(parseInt(page), parseInt(limit),
+            function (err, listData, totalItem) {
+                responseData = {
+                    'listData': listData,
+                    'totalPage': Math.ceil(totalItem / limit),
+                    'page': page,
+                    'limit': limit,
+                    'keyword': keyword
+                };
+                resp.render('admin/product/list', responseData);
+            });
 }
 
 // trả về form.
@@ -144,12 +168,12 @@ exports.update = function (req, resp) {
         req.body,
         {new: false},
         function (err, obj) {
-        if (err) {
-            return res.status(500).send(err);
-        } else {
-            resp.redirect('/admin/products/list');
-        }
-    });
+            if (err) {
+                return res.status(500).send(err);
+            } else {
+                resp.redirect('/admin/products/list');
+            }
+        });
 }
 
 // xóa sản phẩm.

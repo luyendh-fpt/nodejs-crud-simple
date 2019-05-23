@@ -7,12 +7,33 @@ var ProductSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    description: {
+        type: String,
+        trim: true
+    },
+    detail: {
+        type: String
+    },
     price: {
         type: Number,
         required: true
     },
     imageUrl: String,
+    createdAt: {type: Date},
+    updatedAt: {type: Date},
     status: Number
 });
+
+ProductSchema.pre('save', function (next) {
+    var now = new Date();
+    this.updatedAt = now;
+    if (!this.createdAt) {
+        this.createdAt = now;
+    }
+    next();
+});
+
+ProductSchema.index({name: 'text', description: 'text', detail: 'text'});
+
 var Product = mongoose.model('products', ProductSchema);
 module.exports = Product;
