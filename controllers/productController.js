@@ -1,6 +1,7 @@
 var Product = require('../models/product');
 require('mongoose-pagination');
 const { check, validationResult } = require('express-validator/check');
+var cloudinary = require('cloudinary').v2;
 
 exports.validate = function(method){
     switch (method){
@@ -40,25 +41,71 @@ exports.create = function (req, resp) {
 
 // lưu trữ thông tin.
 exports.save = function (req, resp) {
-    var errors = validationResult(req);
-    if(errors.isEmpty()){
-        var obj = new Product(req.body);
-        obj.save(function (err) {
-            if (err) {
-                return resp.status(500).send(err);
-            } else {
-                return resp.redirect('/admin/products/list');
-            }
-        });
-    }else{
-        console.log('@@@');
-        var responseData = {
-            'action': '/admin/products/create',
-            'obj': new Product(req.body),
-            'errors': errors.array()
+    // var errors = validationResult(req);
+    // if(errors.isEmpty()){
+    //     var obj = new Product(req.body);
+    //
+    //     var fileGettingUploaded = req.files.image.data;
+    //     cloudinary.uploader
+    //         .upload_stream(function (error, result) {
+    //             var imageUrl = result.url;
+    //             obj.imageUrl = imageUrl;
+    //             obj.save(function (err) {
+    //                 if (err) {
+    //                     return resp.status(500).send(err);
+    //                 } else {
+    //                     return resp.redirect('/admin/products/list');
+    //                 }
+    //             });
+    //             // res.send("Lưu sản phẩm thành công.");
+    //             console.log(cloudinary.image(result.public_id, {format: "jpg", crop: "fill", width: 120, height: 80}));
+    //         }).end(fileGettingUploaded);
+    //
+    // }else{
+    //     console.log('@@@');
+    //     var responseData = {
+    //         'action': '/admin/products/create',
+    //         'obj': new Product(req.body),
+    //         'errors': errors.array()
+    //     }
+    //     resp.render('admin/product/form', responseData);
+    // }
+
+    // var obj = new Product(req.body);
+    // if (req.files && req.files.image) {
+    //     var fileGettingUploaded = req.files.image.data;
+    //     cloudinary.uploader
+    //         .upload_stream(function (error, result) {
+    //             var imageUrl = result.url;
+    //             obj.imageUrl = imageUrl;
+    //             obj.save(function (err) {
+    //                 if (err) {
+    //                     return resp.status(500).send(err);
+    //                 } else {
+    //                     return resp.redirect('/admin/products/list');
+    //                 }
+    //             });
+    //             // res.send("Lưu sản phẩm thành công.");
+    //             console.log(cloudinary.image(result.public_id, {format: "jpg", crop: "fill", width: 120, height: 80}));
+    //         }).end(fileGettingUploaded);
+    // }else{
+    //     obj.imageUrl = 'https://www.touchtaiwan.com/images/default.jpg';
+    //     obj.save(function (err) {
+    //         if (err) {
+    //             return resp.status(500).send(err);
+    //         } else {
+    //             return resp.redirect('/admin/products/list');
+    //         }
+    //     });
+    // }
+    var obj = new Product(req.body);
+    obj.save(function (err) {
+        if (err) {
+            return resp.status(500).send(err);
+        } else {
+            return resp.redirect('/admin/products/list');
         }
-        resp.render('admin/product/form', responseData);
-    }
+    });
 
 }
 
